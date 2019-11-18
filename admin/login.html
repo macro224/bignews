@@ -60,7 +60,7 @@
       </div>
     </div>
   </div>
-
+  <script src="./libs/http.js"></script>
   <script>
     $(function () {
       //  登录的逻辑
@@ -80,22 +80,19 @@
           return;
         }
         // 4.使用ajax请求数据，做页面渲染
-        $.ajax({
-          type: 'post',
-          url: 'http://localhost:8080/api/v1/admin/user/login',
+        $.post({
+          url: window.BigNew.user_login,
           data: {
             username: userName,
             password: userPwd
           },
           success: function (res) {
+            window.localStorage.setItem('token',res.token);
             $('.modal-body').html(res.msg);
             $('#myModal').modal();
             //判断用户名或者密码是否正确
             // console.log(res);
             if (res.code == 200) {
-              // alert('欢迎回家，亲');
-              // $('.modal-body').html('欢迎回家，亲');
-              // $('#myModal').modal();
               //跳转的网站的首页
               $('#myModal').on('hidden.bs.modal', function (e) {
                 window.location.href = './index.html';

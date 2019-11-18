@@ -54,5 +54,23 @@
 
         </div>
     </div>
+    <script src="./libs/http.js"></script>
+    <script>
+        $.get({
+            url:window.BigNew.user_info,
+            success:function(res){
+                console.log(res);
+                $('.user_info>img').attr('src',res.data.userPic);
+                $('.user_info>span').html('欢迎&nbsp;&nbsp;'+res.data.nickname);
+                $('.user_center_link>img').attr('src',res.data.userPic);
+            }
+        });
+        $('.logout').on('click',function(){
+            // 删除本地存储中的token
+            window.localStorage.removeItem('token');
+            // 回到登录页面
+            window.location.href='./login.html';
+        });
+    </script>
 </body>
 </html>

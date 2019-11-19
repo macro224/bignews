@@ -60,6 +60,7 @@
                             value="12345678">
                     </div>
                 </div>
+
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-success btn-edit">修改</button>
@@ -68,6 +69,22 @@
             </form>
         </div>
     </div>
+    <script src="./libs/http.js"></script>
+    <script>
+        $(function(){
+            $.get({
+                url:window.BigNew.user_detail,
+                success:function(res){
+                    // console.log(res);
+                    $('#inputEmail1').val(res.data.username);
+                    $('#inputEmail2').val(res.data.nickname);
+                    $('#inputEmail3').val(res.data.email);
+                    $('.user_pic').attr('src',res.data.userPic);
+                    $('#inputEmail4').val(res.data.password)
+                }
+            })
+        })
+    </script>
 </body>
 
 </html>

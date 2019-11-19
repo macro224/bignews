@@ -36,22 +36,22 @@
                 </li>
             </ul>
 
-            <div class="level01"><a href="#" target="main_frame"><i
-                        class="iconfont icon-comment"></i><span>评论管理</span></a></div>
-            <div class="level01" id="user"><a href="#" target="main_frame"><i
-                        class="iconfont icon-user"></i><span>个人中心</span></a></div>
+            <div class="level01"><a href="./comment_list.html" target="main_frame"><i
+                class="iconfont icon-comment"></i><span>评论管理</span></a></div>
+            <div class="level01" id="user"><a href="user.html" target="main_frame"><i
+                class="iconfont icon-user"></i><span>个人中心</span></a></div>
         </div>
         <!-- 顶部栏 -->
         <div class="header_bar">
             <div class="user_center_link">
                 <a href="./user.html" target="main_frame">个人中心</a>
-                <img src="images/2.jpg" alt="person">
+                <img src="./images/2.jpg" alt="person">
                 <a href="javascript:void(0)" class="logout"><i class="iconfont icon-tuichu"></i> 退出</a>
             </div>
         </div>
         <!-- 右侧主体内容 -->
         <div class="main" id="main_body">
-
+            <iframe src="./main_count.html" width="100%" height="100%" frameborder="0"></iframe>
         </div>
     </div>
     <script src="./libs/http.js"></script>
@@ -59,7 +59,7 @@
         $.get({
             url:window.BigNew.user_info,
             success:function(res){
-                console.log(res);
+                // console.log(res);
                 $('.user_info>img').attr('src',res.data.userPic);
                 $('.user_info>span').html('欢迎&nbsp;&nbsp;'+res.data.nickname);
                 $('.user_center_link>img').attr('src',res.data.userPic);

@@ -80,6 +80,7 @@
             </div>
         </div>
     </div>
+
     <!-- 准备模板 -->
     <script type="text/html" id="list">
         {{each data}}
@@ -88,7 +89,7 @@
                 <td>{{$value.slug}}</td>
                 <td class="text-center">
                     <button data-toggle="modal" class=" btn btn-info btn-xs" data-target="#myModal" data-id='{{$value.id}}'>编辑</button>
-                    <button class="btn btn-danger btn-xs" data-id='{{$value.id}}'>删除</button>
+                    <button class="btn btn-danger btn-xs shanchu" data-id='{{$value.id}}'>删除</button>
                 </td>
             </tr>
         {{/each}}
@@ -137,8 +138,64 @@
                 })
             }
         })
-    
-    
+        // 给模态框内新增按钮和编辑按钮添加点击事件
+        $('#btn-confirm').on('click',function(){
+            if($(this).text()=='新增'){
+                // alert('新增按钮')
+                var slug=$('#message-text').val();
+                var name=$('#recipient-name').val();
+                $.post({
+                    url:BigNew.category_add,
+                    data:{
+                        slug:slug,
+                        name:name
+                    },
+                    success:function(res){
+                        if(res.code==201){
+                            getData();
+                            $('#myModal').modal('hide');
+                        }
+                    }
+                })
+            }else{
+                // alert('编辑按钮')
+                var id=$('#categoryId').val();
+                var slug=$('#message-text').val();
+                var name=$('#recipient-name').val();
+                $.post({
+                    url:BigNew.category_edit,
+                    data:{
+                        id:id,
+                        name:name,
+                        slug:slug
+                    },
+                    success:function(res){
+                        if(res.code==200){
+                            getData();
+                            $('#myModal').modal('hide');
+                        }else if(res.code==400){
+                            alert('真的不改点什么吗？')
+                        }
+                    }
+                })
+            }
+        })
+        // 给新添加的删除按钮添加点击事件
+        $('tbody').on('click','.shanchu',function(){
+            var id=$(this).attr('data-id');
+            $.post({
+                url:BigNew.category_delete,
+                data:{
+                    id:id
+                },
+                success:function(res){
+                    if(res.code==204){
+                        getData();
+                    }
+                }
+            })
+            
+        })
     })
     </script>
 </body>

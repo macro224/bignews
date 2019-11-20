@@ -80,6 +80,7 @@
             </div>
         </div>
     </div>
+    <div class="tishikuang"></div>
 
     <!-- 准备模板 -->
     <script type="text/html" id="list">
@@ -154,6 +155,7 @@
                         if(res.code==201){
                             getData();
                             $('#myModal').modal('hide');
+                            $('.tishikuang').text('添加成功！！！').slideToggle().delay(500).slideToggle();
                         }
                     }
                 })
@@ -173,6 +175,7 @@
                         if(res.code==200){
                             getData();
                             $('#myModal').modal('hide');
+                            $('.tishikuang').text('修改成功！！！').slideToggle().delay(500).slideToggle();
                         }else if(res.code==400){
                             alert('真的不改点什么吗？')
                         }
@@ -191,6 +194,7 @@
                 success:function(res){
                     if(res.code==204){
                         getData();
+                        $('.tishikuang').text('删除成功！！！').slideToggle().delay(500).slideToggle();
                     }
                 }
             })

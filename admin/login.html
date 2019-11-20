@@ -90,7 +90,7 @@
             //判断用户名或者密码是否正确
             // console.log(res);
             if (res.code == 200) {
-              //跳转的网站的首页
+              //此事件在模态框被隐藏（并且同时在 CSS 过渡效果完成）之后跳转到网站的首页
               $('#myModal').on('hidden.bs.modal', function (e) {
                 window.location.href = './index.html';
               })

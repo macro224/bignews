@@ -44,7 +44,7 @@
                     <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
                     <div class="col-sm-10">
                         <img src="images/2.jpg" alt="" class="user_pic">
-                        <input style="display: block" name="userPic" type="file" id="exampleInputFile">
+                        <input style="display: none" name="userPic" type="file" id="exampleInputFile">
                         <!-- 给label标签的for属性赋值,值是input标签的id,那这样的话点击label就相当于点击了input -->
                         <br>
                         <label for="exampleInputFile">
@@ -76,12 +76,27 @@
                 url:window.BigNew.user_detail,
                 success:function(res){
                     // console.log(res);
-                    $('#inputEmail1').val(res.data.username);
-                    $('#inputEmail2').val(res.data.nickname);
-                    $('#inputEmail3').val(res.data.email);
-                    $('.user_pic').attr('src',res.data.userPic);
-                    $('#inputEmail4').val(res.data.password)
+                    if(res.code==200){
+                        // $('#inputEmail1').val(res.data.username);
+                        // $('#inputEmail2').val(res.data.nickname);
+                        // $('#inputEmail3').val(res.data.email);
+                        // $('#inputEmail4').val(res.data.password);
+                        // console.log(res.data);
+                        for(var key in res.data){
+                            // console.log(key);
+                            // console.log(res.data[key]);
+                            $('input.'+key).val(res.data[key]);
+                        }
+                        $('.user_pic').attr('src',res.data.userPic);
+                    }
                 }
+            })
+            $('#exampleInputFile').on('change',function(){
+                // console.dir(this.files[0]);
+                // window.URL.createObjectURL()可以将图片的信息转换为url地址
+                var url=window.URL.createObjectURL(this.files[0]);
+                // 将转换的url设置给img的src属性
+                $('.user_pic').attr('src',url);
             })
         })
     </script>

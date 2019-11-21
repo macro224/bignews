@@ -67,9 +67,37 @@
             </form>
         </div>
     </div>
+    <script src="./libs/http.js"></script>
+
+    <script type="text/html" id="fenlei">
+        {{each data}}
+            <option value='{{$value.id}}'>{{$value.name}}</option>
+        {{/each}}
+    </script>
     <script>
         $(function(){
-            $('.btn-release').on('click',function(){
+            // 获取分类名称信息
+            $.get({
+                url: BigNew.category_list,
+                success: function (res) {
+                    if (res.code == 200) {
+                        // 将获取到的分类名称信息渲染到页面上
+                        $('.category').html(template('fenlei', res));
+                    }
+                }
+            })
+
+            // 给上传图片添加个change事件
+            $('#inputCover').on('change',function(){
+                // URL.createObjectURL()可以将图片的信息转换为url地址
+                var url=URL.createObjectURL(this.files[0]);
+                $('.article_cover').attr('src',url)
+            })
+
+            $('.btn-release').on('click',function(e){
+                e.preventDefault();
+                var neirong=new FormData();
+                console.log(neirong);
                 
             })
         })

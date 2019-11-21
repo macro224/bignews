@@ -96,7 +96,7 @@
             $('button.btn-edit').on('click',function(e){
                 // 因为按钮type是submit方式会默认跳转，所以要阻止默认行为
                 e.preventDefault();
-                // 获取form表单中的信息，formData只能处理原生的DOM对象，所以要转为jQUeryDUIXIANG 
+                // 获取form表单中的信息，formData只能处理原生的DOM对象，所以要转为jQUery对象
                 // var form=$('#form')[0];
                 var userData=new FormData($('#form')[0]);
                 $.post({

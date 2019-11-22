@@ -56,7 +56,7 @@
     <div class="main_con clearfix">
         <div class="left_con">
             <ul class="focus_list">
-                <li class="first">
+                <!-- <li class="first">
                     <a href="#"><img src="images/pic01.jpg" alt=""></a>
                     <p>图片说明</p>
                 </li>
@@ -75,7 +75,7 @@
                 <li>
                     <a href="#"><img src="images/pic06.jpg" alt=""></a>
                     <p>图片说明</p>
-                </li>
+                </li> -->
             </ul>
 
             <div class="common_title">
@@ -84,7 +84,7 @@
             </div>
 
             <div class="common_news">
-                <div class="common_news_list">
+                <!-- <div class="common_news_list">
                     <a href="#" class="list_pic"><img src="images/pic09.jpg" alt=""></a>
                     <h4><a href="#">亚马逊金融试水中国？背后却是和华尔街的“金融战争” </a></h4>
                     <p>亚马逊抛弃了中国的买家们，却难以割舍庞大的卖家市场，有消息指出亚马逊中国将针对中国庞大的卖家群体推出一项贷款推荐计划。在连续对印度、墨西哥等新兴市场大力推广线上支付服务后，亚马逊金融试水进军中国市场的信号终于被放出。
@@ -142,8 +142,8 @@
                             )&nbsp;&nbsp;&nbsp;<i class="fa fa-commenting"></i>&nbsp;评论( 10 )</span>
                         <b>发布于 2018-08-30 12:18:58</b>
                     </div>
-                </div>
-            </div>
+                </div>-->
+            </div> 
 
         </div>
         <div class="right_con">
@@ -228,6 +228,61 @@
     <!-- 引入jq文件 -->
     <script src="./js/jquery-1.12.4.min.js"></script>
     
+    <!-- 图片展示模板 -->
+    <script type="text/html" id="imglistmb">
+        {{each data as v index}}
+            {{if index==0}}
+                <li class="first">
+                {{else}}
+                <li>
+            {{/if}}
+                <a href="./list.html?id={{v.id}}"><img src="{{v.cover}}" alt=""></a>
+                <p>{{v.title}}</p>
+            </li>
+        {{/each}}
+    </script>
+    <!-- 最新资讯模板 -->
+    <script type="text/html">
+        {{each data}}
+            <div class="common_news_list">
+                <a href="#" class="list_pic"><img src="images/pic09.jpg" alt=""></a>
+                <h4><a href="#">亚马逊金融试水中国？背后却是和华尔街的“金融战争” </a></h4>
+                <p>亚马逊抛弃了中国的买家们，却难以割舍庞大的卖家市场，有消息指出亚马逊中国将针对中国庞大的卖家群体推出一项贷款推荐计划。在连续对印度、墨西哥等新兴市场大力推广线上支付服务后，亚马逊金融试水进军中国市场的信号终于被放出。
+                </p>
+                <div class="new_info">
+                    <span>标签：财经&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<i class="fa fa-eye"></i>&nbsp;阅读( 5
+                        )&nbsp;&nbsp;&nbsp;<i class="fa fa-commenting"></i>&nbsp;评论( 10 )</span>
+                    <b>发布于 2018-08-30 12:18:58</b>
+                </div>
+            </div>
+        {{/each}}
+    </script>
+
+    <script src="./js/http.js"></script>
+    <script>
+        $(function(){
+            // 获取热点图信息数据并渲染到页面上
+            $.get({
+                url:BigNew.index_hotpic,
+                success:function(res){
+                    if(res.code==200){
+                        $('ul.focus_list').html(template('imglistmb',res));
+                    }
+                }
+            })
+        
+            // 获取最新资讯信息数据
+            $.get({
+                url:BigNew.index_latest,
+                success:function(res){
+                    console.log(res);
+                    
+                }
+            })
+            
+        
+        })
+    </script>
 </body>
 
 </html>

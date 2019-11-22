@@ -14,6 +14,12 @@
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 模板引擎 -->
     <script src="./libs/template-web.js"></script>
+    <!-- 引入时间插件的样式和js -->
+    <link rel="stylesheet" href="./libs/jedate/css/jeDate-test.css">
+    <link rel="stylesheet" href="./libs/jedate/css/jedate.css">
+    <script src="./libs/jedate/js/jedate.js"></script>
+    <!-- wangeditor的js文件 -->
+    <script src="./libs/wangEditor.js"></script>
 </head>
 
 <body>
@@ -23,10 +29,12 @@
         </div>
         <div class="container-fluid common_con">
             <form class="form-horizontal article_form" id="form">
+                <!-- 隐藏域---存放信息 -->
+                <input type="hidden" name='id'  id="categoryId">
                 <div class="form-group">
                     <label for="inputTitle" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="text" name="title" class="form-control title" id="inputTitle" value="文章标题文字">
+                        <input type="text" name="title" class="form-control title" id="inputTitle" value="">
                     </div>
                 </div>
                 <div class="form-group">
@@ -38,24 +46,28 @@
                 </div>
                 <div class="form-group">
                     <label for="inputCategory" class="col-sm-2 control-label">文章类别：</label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-2">
                         <select class="form-control category" name="categoryId">
-                            <option>类别一</option>
+                            <!-- <option>类别一</option>
                             <option>类别二</option>
                             <option>类别三</option>
                             <option selected>类别四</option>
-                            <option>类别五</option>
+                            <option>类别五</option> -->
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">发布时间：</label>
-                    <div class="col-sm-4">
+                    <div class="jeinpbox col-sm-4">
+                        <input type="text" name='date' class="jeinput" id="testico" placeholder="YYYY-MM-DD">
+                        <div class="icons jebtns" onclick="jeDate('#testico',{zIndex:99999,trigger:false,format: 'YYYY-MM-DD'})">
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
-                    <div class="col-sm-10">
+                    <div id="editor" class="col-sm-8">
+                        <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
                     </div>
                 </div>
                 <div class="form-group">
@@ -67,6 +79,111 @@
             </form>
         </div>
     </div>
+    <!-- 准备文章类别模板 -->
+    <script type="text/html" id="leibiemb">
+        {{each data}}
+            <option value="{{$value.id}}">{{$value.name}}</option>
+        {{/each}}
+    </script>
+    <script src="./libs/http.js"></script>
+    <script>
+        $(function(){
+            // 获取文章类别信息并渲染到页面
+            $.get({
+                url:BigNew.category_list,
+                success:function(res){
+                    $('select.category').html(template('leibiemb',res))
+                }
+            })
+
+            //jeDate时间插件
+            jeDate("#testico", {
+                zIndex:99999,
+                festival: false,
+                format: 'YYYY-MM-DD',
+                isTime: true
+               
+            });
+            //富文本编辑器
+            var E = window.wangEditor
+            var editor = new E('#editor')
+            editor.create();
+
+            // 用来将接收的字符串参数转换为对象
+            function searchStr2obj(str) {
+                str = str.slice(1);
+                searchArr = str.split('&');
+                var obj = {};
+                for (var key in searchArr) {
+                    var tempArr = searchArr[key].split('=');
+                    obj[tempArr[0]] = tempArr[1];
+                }
+                return obj;
+            };
+            
+            // 获取文章信息并渲染到编辑页面上
+            $.get({
+                url:BigNew.article_search,
+                data:{
+                    id:searchStr2obj(window.location.search).id
+                },
+                success:function(res){
+                    if(res.code == 200) {
+                        //将获得的数据对应填充到表单元素中
+                        $('#testico').val(res.data.date);
+                        $('#categoryId').val(res.data.id);
+                        editor.txt.html(res.data.content);
+                        $('#inputTitle').val(res.data.title);
+                        $('select.category').val(res.data.categoryId);
+                        $('img.article_cover').attr('src', res.data.cover);
+                    }
+                }
+            });
+        
+            
+            // 给 button.btn-edit 修改按钮添加点击事件
+            $('button.btn-edit').on('click',function(e){
+                // 阻止submit的默认事件
+                e.preventDefault();
+                // 获取表单中有name值的数据
+                var fd=new FormData($('#form')[0]);
+                // 添加表单中没有name值的数据
+                fd.append('state','已发布');
+                fd.append('content',editor.txt.html());
+                $.post({
+                    url:BigNew.article_edit,
+                    data:fd,
+                    processData:false,
+                    contentType:false,
+                    success:function(res){
+                        // console.log(res);
+                        window.history.back();
+                    }
+                })
+            });
+
+            // 给 button.btn-draft 存为草稿按钮添加点击事件
+            $('button.btn-draft').on('click',function(e){
+                // 阻止submit的默认事件
+                e.preventDefault();
+                // 获取表单中有name值的数据
+                var fd=new FormData($('#form')[0]);
+                // 添加表单中没有name值的数据
+                fd.append('content',editor.txt.html());
+                $.post({
+                    url:BigNew.article_edit,
+                    data:fd,
+                    processData:false,
+                    contentType:false,
+                    success:function(res){
+                        // console.log(res);
+                        window.history.back();
+                    }
+                })
+            });
+        
+        })
+    </script>
 </body>
 
 </html>

@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="css/main.css">
   <script src="./libs/jquery-1.12.4.min.js"></script>
   <script src="./libs/template-web.js"></script>
+  <!-- 添加分页的插件js文件 -->
+  <script src="./libs/jquery.twbsPagination.js"></script>
 </head>
 
 <body>
@@ -142,20 +144,7 @@
         </tbody>
       </table>
       <div class="row text-center">
-        <ul class="pagination pagination-sm">
-          <li class="page-item first disabled"><a href="#" class="page-link">首页</a></li>
-          <li class="page-item prev disabled"><a href="#" class="page-link">上一页</a></li>
-          <li class="page-item active"><a href="#" class="page-link">1</a></li>
-          <li class="page-item"><a href="#" class="page-link">2</a></li>
-          <li class="page-item"><a href="#" class="page-link">3</a></li>
-          <li class="page-item"><a href="#" class="page-link">4</a></li>
-          <li class="page-item"><a href="#" class="page-link">5</a></li>
-          <li class="page-item"><a href="#" class="page-link">6</a></li>
-          <li class="page-item"><a href="#" class="page-link">7</a></li>
-          <li class="page-item next"><a href="#" class="page-link">下一页</a></li>
-          <li class="page-item last"><a href="#" class="page-link">尾页</a></li>
-        </ul>
-        <ul id="pagination" class="pagination-sm"></ul>
+        <ul id="pagination-demo" class="pagination-sm"></ul>
       </div>
     </div>
   </div>
@@ -249,10 +238,38 @@
             if(res.code==200){
               // 通过/批准成功后重新获取一次页面信息
               Fcpinglun();
+              // 更新分页信息
+              $('#pagination-demo').twbsPagination('changeTotalPages',res.data.totalPage,1);
             }
           }
         })
       })
+    
+      // 分页
+      $.get({
+          url:BigNew.comment_list,
+          data:{
+            page:mypage,
+            perpage:perpage
+          },
+          success:function(res){
+            // 获取评论列表信息并渲染到页面
+            $('tbody').html(template('pinglunmb',res))
+            $('#pagination-demo').twbsPagination({
+              totalPages: res.data.totalPage,
+              visiblePages: 7,
+              first: '首页',
+              prev: '上一页',
+              next: '下一页',
+              last: '尾页',
+              onPageClick: function (event, page) {
+                mypage=page;
+                Fcpinglun();
+              }
+            })
+          }
+        })
+    
     })
   </script>
 </body>

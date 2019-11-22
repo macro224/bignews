@@ -32,7 +32,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <!-- <tr>
             <td>小周</td>
             <td>这是一条测试评论，欢迎光临</td>
             <td>《世界，你好》</td>
@@ -138,7 +138,7 @@
               <a href="javascript:editTr( 'rejected',11 );" class="btn btn-warning btn-xs">拒绝</a>
               <a href="javascript:editTr( 'trashed',11 );" class="btn btn-danger btn-xs">删除</a>
             </td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
       <div class="row text-center">
@@ -157,11 +157,104 @@
         </ul>
         <ul id="pagination" class="pagination-sm"></ul>
       </div>
-
     </div>
   </div>
+  <!-- 准备评论信息模板 -->
+  <script type="text/html" id="pinglunmb">
+    {{each data.data}}
+      {{if $value.state=='待审核'}}
+        <tr class="danger">
+        {{else}}
+        <tr>
+      {{/if}}
+        <td>{{$value.author}}</td>
+        <td>{{$value.content}}</td>
+        <td>{{$value.title}}</td>
+        <td>{{$value.date}} {{$value.time}}</td>
+        <td>{{$value.state}}</td>
+        <td class="text-center">
+          {{if $value.state=='待审核'}}
+            <a href="javascript:void(0);;" data-id="{{$value.id}}" class="btn btn-warning btn-xs btn-pass">批准</a>
+            {{else if $value.state=='已通过'}}
+            <a href="javascript:void(0);;" data-id="{{$value.id}}" class="btn btn-warning btn-xs btn-jujue">拒绝</a>
+            {{else if $value.state=='已拒绝'}}
+            <a href="javascript:void(0);;" data-id="{{$value.id}}" class="btn btn-warning btn-xs btn-pass">通过</a>
+          {{/if}}
+          <a href="javascript:void(0);;" data-id="{{$value.id}}" class="btn btn-danger btn-xs btn-shanchu">删除</a>
+        </td>
+      </tr>
+    {{/each}}
+  </script>
 
-  
+  <script src="./libs/http.js"></script>
+  <script>
+    $(function(){
+      var mypage=1;
+      var perpage=10;
+      // 封装一个函数获取评论列表信息并渲染到页面
+      Fcpinglun();
+      function Fcpinglun(){
+        $.get({
+          url:BigNew.comment_list,
+          data:{
+            page:mypage,
+            perpage:perpage
+          },
+          success:function(res){
+            $('tbody').html(template('pinglunmb',res))
+          }
+        })
+      };
+      
+      // 给通过/批准 btn-pass 按钮添加点击事件
+      $('tbody').on('click','.btn-pass',function(){
+        $.post({
+          url:BigNew.comment_pass,
+          data:{
+            id:$(this).attr('data-id')
+          },
+          success:function(res){
+            if(res.code==200){
+              // 通过/批准成功后重新获取一次页面信息
+              Fcpinglun();
+            }
+          }
+        })
+      })
+
+      // 给拒绝 btn-jujue 按钮添加点击事件
+      $('tbody').on('click','.btn-jujue',function(){
+        $.post({
+          url:BigNew.comment_reject,
+          data:{
+            id:$(this).attr('data-id')
+          },
+          success:function(res){
+            if(res.code==200){
+              // 通过/批准成功后重新获取一次页面信息
+              Fcpinglun();
+            }
+          }
+        })
+      })
+    
+      // 给删除按钮 btn-shanchu 添加点击事件
+      $('tbody').on('click','.btn-shanchu',function(){
+        $.post({
+          url:BigNew.comment_delete,
+          data:{
+            id:$(this).attr('data-id')
+          },
+          success:function(res){
+            if(res.code==200){
+              // 通过/批准成功后重新获取一次页面信息
+              Fcpinglun();
+            }
+          }
+        })
+      })
+    })
+  </script>
 </body>
 
 </html>

@@ -29,13 +29,13 @@
             <div class="menu_collapse fl">
                 <a href="javascript:;" class="level_one"><i class="fa fa-list-ul"></i>全部分类</a>
                 <ul class="level_two">
-                    <li class="up"></li>
+                    <!-- <li class="up"></li>
                     <li><a href="./list.html">最 新</a></li>
                     <li><a href="./list.html">科 技</a></li>
                     <li><a href="./list.html">股 市</a></li>
                     <li><a href="./list.html">商 品</a></li>
                     <li><a href="./list.html">外 汇</a></li>
-                    <li><a href="./list.html">公 司</a></li>
+                    <li><a href="./list.html">公 司</a></li> -->
                 </ul>
             </div>
             <ul class="left_menu fl">
@@ -150,19 +150,19 @@
             <div class="common_wrap">
                 <h3><i class="fa fa-bar-chart"></i> 一周热门排行</h3>
                 <ul class="content_list hotrank_list">
-                    <li><span class="first">1</span><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
+                    <!-- <li><span class="first">1</span><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
                     <li><span class="second">2</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><span class="third">3</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><span>4</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><span>5</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><span>6</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><span>7</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
+                    <li><span>7</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li> -->
                 </ul>
             </div>
             <div class="common_wrap">
                 <h3><i class="fa fa-commenting-o"></i> 最新评论</h3>
                 <ul class="content_list comment_list">
-                    <li>
+                    <!-- <li>
                         <span>山</span>
                         <b><em>山治</em> 9个月前(08-14)说:</b>
                         <strong>挺会玩的</strong>
@@ -191,19 +191,19 @@
                         <span>乔</span>
                         <b><em>乔峰</em> 9个月前(08-14)说:</b>
                         <strong>挺会玩的</strong>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <div class="common_wrap">
                 <h3><i class="fa fa-bullseye"></i> 焦点关注</h3>
                 <ul class="content_list guanzhu_list">
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
+                    <!-- <li><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
                     <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
+                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li> -->
                 </ul>
             </div>
         </div>
@@ -242,21 +242,58 @@
         {{/each}}
     </script>
     <!-- 最新资讯模板 -->
-    <script type="text/html">
+    <script type="text/html" id="zuixinmb">
         {{each data}}
             <div class="common_news_list">
-                <a href="#" class="list_pic"><img src="images/pic09.jpg" alt=""></a>
-                <h4><a href="#">亚马逊金融试水中国？背后却是和华尔街的“金融战争” </a></h4>
-                <p>亚马逊抛弃了中国的买家们，却难以割舍庞大的卖家市场，有消息指出亚马逊中国将针对中国庞大的卖家群体推出一项贷款推荐计划。在连续对印度、墨西哥等新兴市场大力推广线上支付服务后，亚马逊金融试水进军中国市场的信号终于被放出。
-                </p>
+                <a href="./list.html?id={{$value.id}}" class="list_pic"><img src="{{$value.cover}}" alt=""></a>
+                <h4><a href="./list.html?id={{$value.id}}">{{$value.title}}</a></h4>
+                <p>{{$value.intro}}</p>
                 <div class="new_info">
-                    <span>标签：财经&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<i class="fa fa-eye"></i>&nbsp;阅读( 5
-                        )&nbsp;&nbsp;&nbsp;<i class="fa fa-commenting"></i>&nbsp;评论( 10 )</span>
-                    <b>发布于 2018-08-30 12:18:58</b>
+                    <span>标签：{{$value.category}}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<i class="fa fa-eye"></i>&nbsp;阅读( {{$value.read}} )&nbsp;&nbsp;&nbsp;<i class="fa fa-commenting"></i>&nbsp;评论( {{$value.comments}} )</span>
+                    <b>发布于 {{$value.date}}</b>
                 </div>
             </div>
         {{/each}}
     </script>
+    <!-- 文章热门排行模板 -->
+    <script type="text/html" id="paihangmb">
+        {{each data as v index}}
+            {{if index==0}}
+                <li><span class="first">{{index+1}}</span><a href="./article.html?id={{v.id}}">{{v.title}}</a></li>
+                {{else if index==1}}
+                    <li><span class="second">{{index+1}}</span><a href="./article.html?id={{v.id}}">{{v.title}}</a></li>
+                {{else if index==2}}
+                    <li><span  class="third">{{index+1}}</span><a href="./article.html?id={{v.id}}">{{v.title}}</a></li>
+                {{else}}
+                    <li><span>{{index+1}}</span><a href="./article.html?id={{v.id}}">{{v.title}}</a></li>
+            {{/if}}
+        {{/each}}
+    </script>
+    <!-- 焦点关注模板 -->
+    <script type="text/html" id="jiaodianmb">
+        {{each data}}
+            <li><a href="./article.html?id={{$value.id}}">{{$value.intro}}</a></li>
+        {{/each}}
+    </script>
+    <!-- 文章类型模板 -->
+    <script type="text/html" id="leixingmb">
+        <li class="up"></li>
+        {{each data as v index}}
+            <li><a href="./list.html?id={{v.id}}">{{v.name}}</a></li>
+        {{/each}}
+    </script>
+    <!-- 最新评论模板 -->
+    <script type="text/html" id="newpinglunmb">
+        {{each data}}
+            <li>
+                <span>{{$value.author.slice(0,1)}}</span>
+                <b><em>{{$value.author}}</em> {{$value.date}} 说:</b>
+                <strong>{{$value.intro}}</strong>
+            </li>
+        {{/each}}
+    </script>
+    <script type="text/html"></script>
+    <script type="text/html"></script>
 
     <script src="./js/http.js"></script>
     <script>
@@ -275,12 +312,54 @@
             $.get({
                 url:BigNew.index_latest,
                 success:function(res){
-                    console.log(res);
+                    if(res.code==200){
+                        $('div.common_news').html(template('zuixinmb',res));
+                    }
                     
                 }
             })
             
+            // 获取文章热门排行信息数据并渲染到页面上
+            $.get({
+                url:BigNew.index_rank,
+                success:function(res){
+                    if(res.code==200){
+                        $('.hotrank_list').html(template('paihangmb',res))
+                    }
+                }
+            })
+
+            // 获取焦点关注信息数据并渲染到页面上
+            $.get({
+                url:BigNew.index_attention,
+                success:function(res){
+                    if(res.code==200){
+                        $('.guanzhu_list').html(template('jiaodianmb',res))
+                    }
+                }
+            })
         
+            // 获取文章类型信息数据并渲染到页面上
+            $.get({
+                url:BigNew.index_category,
+                success:function(res){
+                    if(res.code==200){
+                        $('.level_two').html(template('leixingmb',res))
+                    }
+                }
+            })
+        
+            // 获取最新评论信息数据并渲染到页面上
+            $.get({
+                url:BigNew.index_latest_comment,
+                success:function(res){
+                    if(res.code==200){
+                        $('.comment_list').html(template('newpinglunmb',res))
+                    }
+                    
+                }
+            })
+
         })
     </script>
 </body>

@@ -119,7 +119,6 @@
                 </div>
             </div> -->
         </div>
-
         <div class="right_con setfl">
             <div class="common_wrap">
                 <h3><i class="fa fa-bar-chart"></i> 一周热门排行</h3>
@@ -245,15 +244,10 @@
             当前位置： <a href="#">首页</a> &gt; <a href="#">科技</a> &gt; 文章详情
         </div>
         <h3 class="article_title">{{data.title}}</h3>
-        <div class="article_info">{{data.author}} 发布于 {{data.date}}&nbsp;&nbsp;&nbsp;分类: {{data.type}}&nbsp;&nbsp;&nbsp;阅读:
-            ({{data.read}})&nbsp;&nbsp;&nbsp;评论: ({{data.comments}})</div>
+        <div class="article_info">
+            {{data.author}} 发布于 {{data.date}}&nbsp;&nbsp;&nbsp;分类: {{data.type}}&nbsp;&nbsp;&nbsp;阅读: ({{data.read}})&nbsp;&nbsp;&nbsp;评论: ({{data.comments}})
+        </div>
         <div class="article_con">
-            <!-- <p>“上天入地”还不够？硅谷“钢铁侠”马斯克名下一家低调的公司最近又融了一大笔钱。</p>
-            <p>马斯克投资的一家小型且不为人熟知的脑机接口（brain-computer
-                interface）公司Neuralink披露，该公司融到了3900万美元，虽然不及公司计划的融资额5100万美元，但也比上次的融资多了不少。</p>
-            <p>两年前该公司曾计划融资1亿美元，但只拿到了2700万美元的融资。</p>
-            <p>在Neuralink递交给美国证券交易委员会（SEC）的材料中，并没有披露融资是否来自传统的风险投资者或者来自该公司的员工。</p>
-            <p>2016年，Neuralink在美国加利福尼亚州以医学研究公司的名义成立，之后一直低调运行。</p> -->
             <p>{{data.content}}</p>
         </div>
         <div class="article_links">
@@ -270,43 +264,27 @@
                 <textarea placeholder="请发表您的评论" class="comment_input"></textarea>
             </div>
             <div class="form_group">
-                <input type="submit" name="" value="评 论" class="comment_sub"></div>
+                <input type="submit" name="" value="评 论" class="comment_sub">
+            </div>
         </form>
         <div class="comment_count">
             {{data.comments}}条评论
         </div>
-        <div class="comment_list_con">
-            <div class="comment_detail_list">
-                <div class="person_pic fl">乔</div>
-                <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                <div class="comment_text fl">
-                    遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                </div>
-            </div>
-            <div class="comment_detail_list">
-                <div class="person_pic fl">段</div>
-                <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                <div class="comment_text fl">
-                    遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                </div>
-            </div>
-            <div class="comment_detail_list">
-                <div class="person_pic fl">虚</div>
-                <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                <div class="comment_text fl">
-                    遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                </div>
-            </div>
-            <div class="comment_detail_list">
-                <div class="person_pic fl">王</div>
-                <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                <div class="comment_text fl">
-                    遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                </div>
-            </div>
-        </div>
+        <div class="comment_list_con"></div>
     </script>
-
+    <!-- 评论列表模板 -->
+    <script type="text/html" id="pllistmb">
+        {{each data}}
+            <div class="comment_detail_list">
+                <div class="person_pic fl">{{$value.author.slice(0,1)}}</div>
+                <div class="name_time fl"><b>{{$value.author}}</b><span>{{$value.date}} {{$value.time}}</span></div>
+                <div class="comment_text fl">
+                    {{$value.content}}
+                </div>
+            </div>
+        {{/each}}
+    </script>
+    
     <script>
         $(function () {
             // 获取文章热门排行信息数据并渲染到页面上
@@ -361,6 +339,7 @@
                 }
                 return obj;
             };
+            
             // 获取文章详细内容
             $.get({
                 url:BigNew.index_article,
@@ -368,11 +347,39 @@
                     id:searchStr2obj(window.location.search).id
                 },
                 success:function(res){
-                    $('.setfr').html(template('xxneirongmb',res))
+                    // 文章详细内容的渲染
+                    $('.setfr').html(template('xxneirongmb',res));
+                    // 获取评论列表信息并渲染到页面
+                    $.get({
+                        url:BigNew.index_get_comment,
+                        data:{
+                            articleId:searchStr2obj(window.location.search).id
+                        },
+                        success:function(res){
+                            $('.comment_list_con').html(template('pllistmb',res));
+                        }
+                    })
+
+                    // 发表评论 comment_sub
+                    $('.comment_sub').on('click',function(e){
+                        // 因为评论按钮是submit方式，所以要阻止默认事件
+                        e.preventDefault();
+                        $.post({
+                            url:BigNew.index_post_comment,
+                            processData:false,
+                            contentType:false,
+                            data:{
+                                author: $('.comment_name').val(),
+                                content:$('.comment_input').val(),
+                                articleId:searchStr2obj(window.location.search).id
+                            },
+                            success:function(res){
+                                console.log(res);
+                            }
+                        })
+                    })
                 }
             })
-
-
         })
     </script>
 </body>

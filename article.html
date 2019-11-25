@@ -359,15 +359,12 @@
                             $('.comment_list_con').html(template('pllistmb',res));
                         }
                     })
-
                     // 发表评论 comment_sub
                     $('.comment_sub').on('click',function(e){
                         // 因为评论按钮是submit方式，所以要阻止默认事件
                         e.preventDefault();
                         $.post({
                             url:BigNew.index_post_comment,
-                            processData:false,
-                            contentType:false,
                             data:{
                                 author: $('.comment_name').val(),
                                 content:$('.comment_input').val(),
